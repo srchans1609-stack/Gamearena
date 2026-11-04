@@ -144,7 +144,52 @@
     </form>
   </div>
   <!-- Fin dela pestaña de videojuegos -->
-   
+   <!-- Pestaña de Torneos -->
+   <div class="tab-pane fade" id="panel-torneos" role="tabpanel">
+        
+        <!-- Tarjeta (card) que envuelve todo el bloque de filtros y la tabla -->
+        <div class="card p-3 mb-4">
+          <!-- Contenedor flexible para alinear los inputs en horizontal.-->
+    <div class="d-flex gap-2 mb-3">
+      
+      <!-- Desplegable para filtrar por el estado del torneo -->
+      <select id="filtroEstado" class="form-select w-auto">
+        <option value="">Estado...</option>
+        <option value="ABIERTO">ABIERTO</option>
+        <option value="EN_CURSO">EN_CURSO</option>
+        <option value="FINALIZADO">FINALIZADO</option>
+      </select>
+      
+      <!-- Desplegable de videojuegos -->
+      <select id="filtroJuego" class="form-select w-auto">
+        <option value="">Videojuego...</option>
+      </select>
+      
+      <!-- GET /torneos: filtrar torneos -->
+      <button type="button" id="btnFiltrarTorneos" class="btn btn-secondary">Filtrar</button>
+      
+      <!-- Input para buscar un torneo concreto le mete un poco de espacio extra a la izquierda para separarlo visualmente del bloque de filtros. -->
+      <input type="number" id="buscarTorneoId" class="form-control ms-3" style="width: 120px;" placeholder="ID">
+      
+      <!-- GET /torneos/{id}: buscar torneo -->
+      <!-- Botón azul (btn-primary) exclusivo para la búsqueda directa por ID -->
+      <button type="button" class="btn btn-primary">Buscar</button>
+    </div>
+
+          <table class="table table-bordered">
+            <thead class="table-dark">
+              <tr><th>ID</th><th>Nombre</th><th>Estado</th><th>Videojuego</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="cuerpoTorneos">
+              <!-- GET /torneos: lista de torneos -->
+              <!-- Botones por fila:
+                   - GET /torneos/{id}/participaciones: participantes del torneo
+                   - PUT /torneos/{id}: editar torneo
+                   - DELETE /torneos/{id}: eliminar torneo -->
+            </tbody>
+          </table>
+        </div>
+
 
 </div>
 </body>
