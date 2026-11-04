@@ -10,7 +10,29 @@
     <!-- preparo el lienzo donde voy a poner el contenido -->
 <body class="p-4 bg-light">
     <div class="container">
-        
+    <!--Creo el header con el titulo a la izquierda con el fondo oscuro el texto en blanco -->
+        <header class="d-flex justify-content-between align-items-center p-3 bg-dark text-white rounded mb-3">
+            <h1 class="h4 m-0">GameArena</h1>
+            <span id="conexion" class="badge bg-secondary">Sin conectar</span>
+        </header>
+    <!--Creo la zona de aviso con el warning-->
+        <div id="aviso" class="alert alert-warning mb-4" role="alert">
+            zona de avisos (verde, amarillo o rojo)
+        </div>
+    <!--Crea un menú de navegación por pestañas (tabs)-->
+        <ul class="nav nav-tabs mb-4" id="navTabs" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#panel-torneos" type="button">Torneos</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link active" id="tabJugadores" data-bs-toggle="tab" data-bs-target="#panel-jugadores" type="button">Jugadores</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#panel-videojuegos" type="button">Videojuegos</button>
+      </li>
+    </ul>
+
+    
     </div>
     
 </body>
