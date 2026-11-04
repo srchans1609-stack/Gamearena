@@ -189,6 +189,75 @@
             </tbody>
           </table>
         </div>
+        
+
+        <div class="row g-4">
+         <!-- Mitad izquierda de la pantalla-->
+            <div class="col-md-6">
+                <div class="card p-3">
+                <h5>Crear Torneo</h5>
+                
+                <form id="formTorneo">
+                    <!-- Campo de texto normal para el nombre del torneo -->
+                    <input type="text" id="tNombre" class="form-control mb-2" placeholder="Nombre">
+                    
+                    <!-- Desplegable para el estado del torneo, con 3 opciones fijas -->
+                    <select id="tEstado" class="form-select mb-2">
+                    <option value="ABIERTO">ABIERTO</option>
+                    <option value="EN_CURSO">EN_CURSO</option>
+                    <option value="FINALIZADO">FINALIZADO</option>
+                    </select>
+                    
+                    <!-- GET /videojuegos: llenar select -->
+                    <!-- Desplegable para elegir el juego -->
+                    <select id="tVideojuego" class="form-select mb-3" required>
+                    <option value=""></option>
+                    </select>
+                    
+                    <!-- POST /torneos: crear torneo -->
+                    <!-- Botón verde que ocupa todo el ancho (w-100) para enviar el formulario y crear el torneo -->
+                    <button type="submit" class="btn btn-success w-100">Guardar</button>
+                </form>
+                </div>
+            </div>
+          <!-- Mitad derecha de la pantalla -->
+            <div class="col-md-6">
+                
+                <!-- Tarjeta para el formulario de inscripción -->
+                <div class="card p-3 mb-4">
+                <h5>Inscribir Jugador</h5>
+                
+                <form id="formInscripcion">
+                    <!-- GET /jugadores: llenar select -->
+                    <!-- Desplegable de jugadores -->
+                    <select id="insJugador" class="form-select mb-2" required>
+                    <option value=""></option>
+                    </select>
+                    
+                    <!-- Select torneos se llena con GET /torneos -->
+                    <!-- Desplegable de torneos-->
+                    <select id="insTorneo" class="form-select mb-3" required>
+                    <option value=""></option>
+                    </select>
+                    
+                    <!-- POST /participaciones: inscribir -->
+                    <!-- Botón azul principal (btn-primary) que ocupa todo el ancho para efectuar la inscripción en la base de datos -->
+                    <button type="submit" class="btn btn-primary w-100">Inscribir</button>
+                </form>
+                </div>
+            <div id="panelParticipantesTorneo" class="card p-3" hidden>
+              <h5>Participantes</h5>
+              <div id="listaParticipantesTorneo"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Fin pestaña torneos -->
+       </div> <!-- Cierre tab-content -->
+        </div> <!-- Cierre container -->
+
+             <!-- Script bundle antes del /body -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </div>
