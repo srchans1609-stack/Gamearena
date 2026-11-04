@@ -67,27 +67,85 @@
     </div>
     
 
-    <div class="row g-4">
-          <div class="col-md-6">
-            <div class="card p-3">
-              <h5>Crear Jugador</h5>
-              <form id="formJugador">
-                <input type="text" id="jNick" class="form-control mb-2" placeholder="Nick">
-                <input type="email" id="jEmail" class="form-control mb-2" placeholder="Email">
-                <input type="number" id="jNivel" class="form-control mb-3" placeholder="Nivel">
-                <!-- POST /jugadores: crear jugador -->
-                <button type="submit" id="btnJugador" class="btn btn-success w-100">Guardar</button>
-              </form>
-            </div>
-          </div>
+    <!-- Ocupa la mitad de la pantalla (6 de 12 columnas) -->
+  <div class="col-md-6">
+    <!-- Crea un recuadro estilo tarjeta card-->
+    <div class="card p-3">
+      <h5>Crear Jugador</h5>
+      
+      <form id="formJugador">
+        <!-- Campos de entrada para Nick, Email y Nivel. form-control les da el estilo de Bootstrap y -->
+        <input type="text" id="jNick" class="form-control mb-2" placeholder="Nick">
+        <input type="email" id="jEmail" class="form-control mb-2" placeholder="Email">
+        <input type="number" id="jNivel" class="form-control mb-3" placeholder="Nivel">
+        
+        <!-- POST /jugadores: crear jugador -->
+        <!-- Botón para enviar (submit). Es verde y ocupa todo el ancho de la tarjeta-->
+        <button type="submit" id="btnJugador" class="btn btn-success w-100">Guardar</button>
+      </form>
+    </div>
+  </div>
           
-          <div class="col-md-6">
-            <div id="panelTorneosJugador" class="card p-3" hidden>
-              <h5 id="tituloTorneosJugador">Torneos del jugador</h5>
-              <div id="listaTorneosJugador"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+          <!-- Ocupa la otra mitad de la pantalla -->
+  <div class="col-md-6">
+    <!-- Tarjeta idéntica a la anterior, pero tiene el atributo hidden.  -->
+    <div id="panelTorneosJugador" class="card p-3" hidden>
+      <h5 id="tituloTorneosJugador">Torneos del jugador</h5>
+      
+      <!-- Contenedor vacío para inyectar los datos de los torneos que devuelva el Backend que aahora no esta conectado-->
+      <div id="listaTorneosJugador"></div>
+    </div>
+  </div>
+  <!--Fin de la pestaña jugador-->
+  <!--Pestaña de Videojuegos-->
+  <div class="card p-3 mb-4">
+    <h5>Videojuegos</h5>
+    
+    <!-- Contenedor flexible para poner el input y el botón en la misma línea, con una separación entre ellos  -->
+    <div class="d-flex gap-2 mb-2">
+      <!-- Input para buscar un juego por su ID. Tiene un ancho fijo de 150px para no ocupar toda la pantalla -->
+      <input type="number" id="buscarJuegoId" class="form-control" style="width: 150px;" placeholder="ID">
+      
+      <!-- GET /videojuegos/{id}: buscar un videojuego por ID -->
+      <!-- Botón azul (btn-primary) -->
+      <button type="button" class="btn btn-primary">Buscar</button>
+    </div>
+    
+    <!-- Contenedor vacío donde puede inyectar el resultado de la búsqueda individual  -->
+    <div id="resJuego" class="mb-3"></div>
+
+    <!-- Tabla con bordes (table-bordered) para mostrar todos los juegos registrados -->
+    <table class="table table-bordered">
+      <!-- Cabecera de la tabla con fondo oscuro (table-dark) -->
+      <thead class="table-dark">
+        <tr><th>ID</th><th>Título</th><th>Género</th><th>Plataforma</th></tr>
+      </thead>
+      
+      <!-- GET /videojuegos: aquí se pintarán los videojuegos -->
+      <!-- El cuerpo de la tabla está vacío. -->
+      <tbody id="cuerpoJuegos">
+      </tbody>
+    </table>
+  </div>
+              
+       <!-- Otra tarjeta, pero esta ocupa solo la mitad del ancho de su contenedor para que no se estire demasiado -->
+    <div class="card p-3 w-50">
+    <h5>Crear Videojuego</h5>
+    
+    <form id="formJuego">
+      <!-- Campos de texto estándar de Bootstrap para recoger los datos del nuevo juego -->
+      <input type="text" id="juegoTitulo" class="form-control mb-2" placeholder="Título">
+      <input type="text" id="juegoGenero" class="form-control mb-2" placeholder="Género">
+      <input type="text" id="juegoPlataforma" class="form-control mb-3" placeholder="Plataforma">
+      
+      <!-- POST /videojuegos: crear videojuego -->
+      <!-- Botón verde de guardado que ocupa todo el ancho disponible de la tarjeta (w-100) -->
+      <button type="submit" class="btn btn-success w-100">Guardar</button>
+    </form>
+  </div>
+  <!-- Fin dela pestaña de videojuegos -->
+   
+
+</div>
 </body>
 </html>
