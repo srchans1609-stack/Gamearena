@@ -31,9 +31,63 @@
         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#panel-videojuegos" type="button">Videojuegos</button>
       </li>
     </ul>
+    <!-- Aquí empieza el contenido de las pestañas -->
+    <div class="tab-content">
 
-    
+        <!--Pestaña de Jugadores-->
+        <div class="tab-pane fade show active" id="panel-jugadores" role="tabpanel">
+        
+        <div class="card p-3 mb-4">
+          <h5>Buscador Jugadores</h5>
+          <div class="d-flex gap-2 mb-2">
+            <input type="number" id="buscarJugadorId" class="form-control" style="width: 150px;" placeholder="ID">
+            <!-- GET /jugadores/{id}: buscar un jugador por su ID -->
+            <button type="button" id="btnBuscarJugador" class="btn btn-primary">Buscar</button>
+          </div>
+          <div id="resJugador" class="mb-3"></div>
+          <!---->
+          <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr><th>ID</th>
+                <th>Nick</th>
+                <th>Email</th>
+                <th>Nivel</th>
+                <th>Acciones</th></tr>
+            </thead>
+            <tbody id="cuerpoJugadores">
+              <!-- GET /jugadores: aquí se pintarán los jugadores -->
+              <!-- Botones por fila: 
+                   - GET /jugadores/{id}/participaciones: torneos del jugador
+                   - PUT /jugadores/{id}: editar jugador
+                   - DELETE /jugadores/{id}: eliminar jugador -->
+            </tbody>
+          </table>
+        </div>
+        </div>
     </div>
     
+
+    <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card p-3">
+              <h5>Crear Jugador</h5>
+              <form id="formJugador">
+                <input type="text" id="jNick" class="form-control mb-2" placeholder="Nick">
+                <input type="email" id="jEmail" class="form-control mb-2" placeholder="Email">
+                <input type="number" id="jNivel" class="form-control mb-3" placeholder="Nivel">
+                <!-- POST /jugadores: crear jugador -->
+                <button type="submit" id="btnJugador" class="btn btn-success w-100">Guardar</button>
+              </form>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div id="panelTorneosJugador" class="card p-3" hidden>
+              <h5 id="tituloTorneosJugador">Torneos del jugador</h5>
+              <div id="listaTorneosJugador"></div>
+            </div>
+          </div>
+        </div>
+      </div>
 </body>
 </html>
