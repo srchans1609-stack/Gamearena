@@ -67,10 +67,6 @@
             </thead>
             <tbody id="cuerpoJugadores">
               <!-- GET /jugadores: aqui se pintarán los jugadores -->
-              <!-- Botones por fila:
-                   GET /jugadores/{id}/participaciones: torneos del jugador
-                   PUT /jugadores/{id}: editar jugador
-                   DELETE /jugadores/{id}: eliminar jugador -->
             </tbody>
           </table>
         </div>
@@ -117,8 +113,8 @@
             <!-- Input para buscar un juego por su ID. Tiene un ancho fijo de 150px para no ocupar toda la pantalla -->
             <input type="number" id="buscarJuegoId" class="form-control" style="width: 150px;" placeholder="ID">
             <!-- GET /videojuegos/{id}: buscar un videojuego por ID -->
-            <!-- Botón azul (btn-primary) -->
-            <button type="button" class="btn btn-primary">Buscar</button>
+            <!-- Botón azul con su ID añadido para que funcione en el script.js -->
+            <button type="button" id="btnBuscarJuego" class="btn btn-primary">Buscar</button>
           </div>
           <!-- Contenedor vacio donde puede inyectar el resultado de la búsqueda individual -->
           <div id="resJuego" class="mb-3"></div>
@@ -131,7 +127,6 @@
                 <th>ID</th>
                 <th>Titulo</th>
                 <th>Género</th>
-                <th>Plataforma</th>
               </tr>
             </thead>
             <tbody id="cuerpoJuegos">
@@ -146,9 +141,8 @@
           <h5>Crear Videojuego</h5>
           <form id="formJuego">
             <!-- Campos de texto estándar de Bootstrap para recoger los datos del nuevo juego -->
-            <input type="text" id="juegoTitulo" class="form-control mb-2" placeholder="Titulo">
-            <input type="text" id="juegoGenero" class="form-control mb-2" placeholder="Género">
-            <input type="text" id="juegoPlataforma" class="form-control mb-3" placeholder="Plataforma">
+            <input type="text" id="juegoTitulo" class="form-control mb-2" placeholder="Titulo" required>
+            <input type="text" id="juegoGenero" class="form-control mb-2" placeholder="Género" required>
             <!-- POST /videojuegos: crear videojuego -->
             <!-- Botón verde de guardado que ocupa todo el ancho disponible de la tarjeta (w-100) -->
             <button type="submit" class="btn btn-success w-100">Guardar</button>
@@ -193,17 +187,15 @@
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Videojuego</th>
+                <th>Participantes</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="cuerpoTorneos">
               <!-- GET /torneos: lista de torneos -->
-              <!-- Botones por fila:
-                   GET /torneos/{id}/participaciones: participantes del torneo
-                   PUT /torneos/{id}: editar torneo
-                   DELETE /torneos/{id}: eliminar torneo -->
             </tbody>
           </table>
+          
         </div>
 
         <div class="row g-4">
@@ -266,6 +258,8 @@
 
     </div><!-- Cierre tab-content -->
   </div><!-- Cierre container -->
+
+  
 
   <!-- Script bundle antes del /body -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
