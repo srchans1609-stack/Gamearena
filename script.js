@@ -1,65 +1,103 @@
-// URL base de tu backend (Spring Boot)
 const API_URL = 'http://localhost:8080';
 
-//  COMPROBAR CONEXIÓN
+// =========================================================
+// UTILIDADES VISUALES (Avisos y Estados)
+// =========================================================
+function mostrarAviso(mensaje, tipo = 'success') {
+    const aviso = document.getElementById('aviso');
+    aviso.textContent = mensaje;
+    aviso.className = `alert alert-${tipo} mb-4`;
+    aviso.style.display = 'block';
+    setTimeout(() => {
+        aviso.style.display = 'none';
+    }, 4000);
+}
+
+function renderBadgeEstado(estado) {
+    if (estado === 'ABIERTO') {
+        return `<span class="estado-pill estado-abierto">● ABIERTO</span>`;
+    } else if (estado === 'EN_CURSO') {
+        return `<span class="estado-pill estado-en-curso">▲ EN CURSO</span>`;
+    } else {
+        return `<span class="estado-pill estado-finalizado">■ FINALIZADO</span>`;
+    }
+}
+
+// Navegación desde los botones de la pantalla Inicio
+document.querySelectorAll('.btn-ir-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const tabTrigger = document.querySelector(targetId);
+        if (tabTrigger) {
+            bootstrap.Tab.getOrCreateInstance(tabTrigger).show();
+        }
+    });
+});
+
+// =========================================================
+// COMPROBAR CONEXIÓN CON SPRING BOOT
+// =========================================================
 async function comprobarConexion() {
     const badge = document.getElementById('conexion');
     const aviso = document.getElementById('aviso');
     try {
-        // Hacemos una petición rápida a videojuegos para ver si el backend responde
         const res = await fetch(`${API_URL}/videojuegos`);
         if (res.ok) {
-            badge.textContent = 'Conectado';
+            badge.textContent = 'API Conectada';
             badge.className = 'badge bg-success';
-            aviso.style.display = 'none'; // Ocultamos la alerta de error
+            aviso.style.display = 'none';
         } else {
             throw new Error();
         }
     } catch (e) {
-        badge.textContent = 'Backend apagado';
+        badge.textContent = 'Backend desconectado';
         badge.className = 'badge bg-danger';
-        aviso.textContent = 'Error: No se puede conectar con Spring Boot. Comprueba el puerto 8080.';
-        aviso.className = 'alert alert-danger mb-4';
+        aviso.textContent = 'Aviso: El servidor Spring Boot (puerto 8080) no responde. Puedes navegar por las pantallas de diseño.';
+        aviso.className = 'alert alert-warning mb-4';
+        aviso.style.display = 'block';
     }
 }
 
-
+// =========================================================
 // VIDEOJUEGOS
-
-// GET /videojuegos: Cargar tabla y rellenar desplegables de filtros y creación
+// =========================================================
 async function cargarVideojuegos() {
     try {
         const res = await fetch(`${API_URL}/videojuegos`);
         const videojuegos = await res.json();
         
+        document.getElementById('kpiJuegos').textContent = videojuegos.length;
+
         const cuerpo = document.getElementById('cuerpoJuegos');
         const selectTorneo = document.getElementById('tVideojuego');
         const filtroJuego = document.getElementById('filtroJuego');
         
-        // Limpiamos los contenedores antes de rellenarlos
         cuerpo.innerHTML = '';
-        selectTorneo.innerHTML = '<option value="">-- Selecciona --</option>';
+        selectTorneo.innerHTML = '<option value="">Selecciona un videojuego...</option>';
         filtroJuego.innerHTML = '<option value="">Todos los videojuegos</option>';
 
         videojuegos.forEach(juego => {
-            // Pintamos la fila en la tabla (sin la plataforma, que ya no existe)
             cuerpo.innerHTML += `
                 <tr>
                     <td>${juego.id}</td>
-                    <td>${juego.nombre}</td>
-                    <td>${juego.genero}</td>
+                    <td class="fw-semibold">${juego.nombre}</td>
+                    <td><span class="badge bg-light text-dark border">${juego.genero}</span></td>
+                    <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-secondary btn-ficha-juego" data-id="${juego.id}" data-nombre="${juego.nombre}" data-genero="${juego.genero}">Ficha</button>
+                            <button class="btn btn-primary btn-torneos-juego" data-id="${juego.id}">Ver torneos</button>
+                        </div>
+                    </td>
                 </tr>
             `;
-            // Añadimos el juego a los selectores de otras pestañas
             selectTorneo.innerHTML += `<option value="${juego.id}">${juego.nombre}</option>`;
             filtroJuego.innerHTML += `<option value="${juego.id}">${juego.nombre}</option>`;
         });
     } catch (e) { console.error("Error al cargar videojuegos", e); }
 }
 
-// POST /videojuegos: Crear un videojuego nuevo
 document.getElementById('formJuego').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Evita que la página se recargue al enviar el formulario
+    e.preventDefault();
     const nuevo = {
         nombre: document.getElementById('juegoTitulo').value,
         genero: document.getElementById('juegoGenero').value
@@ -72,14 +110,13 @@ document.getElementById('formJuego').addEventListener('submit', async (e) => {
     });
 
     if (res.ok) {
-        document.getElementById('formJuego').reset(); // Limpia el formulario
-        cargarVideojuegos(); // Recarga la tabla para ver el nuevo juego
-        alert("Videojuego creado con éxito");
+        document.getElementById('formJuego').reset();
+        cargarVideojuegos();
+        mostrarAviso('Videojuego registrado correctamente.', 'success');
     }
 });
 
-// GET /videojuegos/{id}: Buscar un videojuego concreto por ID
-document.querySelector('#btnBuscarJuego').addEventListener('click', async () => {
+document.getElementById('btnBuscarJuego').addEventListener('click', async () => {
     const id = document.getElementById('buscarJuegoId').value;
     if (!id) return;
     
@@ -88,70 +125,119 @@ document.querySelector('#btnBuscarJuego').addEventListener('click', async () => 
     
     if (res.ok) {
         const j = await res.json();
-        cajaRes.innerHTML = `<div class="alert alert-success">Encontrado: ${j.nombre} (${j.genero})</div>`;
+        cajaRes.innerHTML = `<div class="alert alert-success mb-0">Videojuego #${j.id}: <strong>${j.nombre}</strong> — Género: ${j.genero}</div>`;
     } else {
-        cajaRes.innerHTML = `<div class="alert alert-danger">Videojuego no encontrado</div>`;
+        cajaRes.innerHTML = `<div class="alert alert-danger mb-0">No existe ningún videojuego con ID ${id}</div>`;
     }
 });
 
+// Acciones en la tabla de Videojuegos (Ficha y Salto a sus torneos)
+document.getElementById('cuerpoJuegos').addEventListener('click', async (e) => {
+    const id = e.target.getAttribute('data-id');
+    if (!id) return;
 
-//  JUGADORES
+    if (e.target.classList.contains('btn-ficha-juego')) {
+        const nombre = e.target.getAttribute('data-nombre');
+        const genero = e.target.getAttribute('data-genero');
+        const panel = document.getElementById('panelFichaJuego');
+        document.getElementById('tituloFichaJuego').textContent = `Ficha: ${nombre}`;
+        document.getElementById('contenidoFichaJuego').innerHTML = `
+            <p class="mb-2"><strong>ID en catálogo:</strong> #${id}</p>
+            <p class="mb-3"><strong>Género competitivo:</strong> ${genero}</p>
+            <button type="button" class="btn btn-sm btn-primary" onclick="irATorneosDeJuego('${id}')">Explorar torneos de ${nombre}</button>
+        `;
+        panel.removeAttribute('hidden');
+    }
 
-// GET /jugadores: Cargar la tabla de jugadores y rellenar el desplegable de inscripción
+    if (e.target.classList.contains('btn-torneos-juego')) {
+        irATorneosDeJuego(id);
+    }
+});
+
+async function irATorneosDeJuego(juegoId) {
+    bootstrap.Tab.getOrCreateInstance(document.querySelector('#tabTorneos')).show();
+    document.getElementById('filtroJuego').value = juegoId;
+    document.getElementById('filtroEstado').value = '';
+    const res = await fetch(`${API_URL}/torneos/videojuego/${juegoId}`);
+    if (res.ok) {
+        const filtrados = await res.json();
+        await pintarTablaTorneos(filtrados);
+    }
+}
+
+// =========================================================
+// JUGADORES (Alta, Edición, Ficha y Borrado)
+// =========================================================
 async function cargarJugadores() {
     try {
         const res = await fetch(`${API_URL}/jugadores`);
         const jugadores = await res.json();
         
+        document.getElementById('kpiJugadores').textContent = jugadores.length;
+
         const cuerpo = document.getElementById('cuerpoJugadores');
         const selectIns = document.getElementById('insJugador');
         
         cuerpo.innerHTML = '';
-        selectIns.innerHTML = '<option value="">-- Selecciona --</option>';
+        selectIns.innerHTML = '<option value="">Selecciona un jugador...</option>';
 
         jugadores.forEach(j => {
             cuerpo.innerHTML += `
                 <tr>
                     <td>${j.id}</td>
-                    <td>${j.nick}</td>
+                    <td class="fw-semibold">${j.nick}</td>
                     <td>${j.email}</td>
-                    <td>${j.nivel}</td>
+                    <td><span class="badge bg-primary">Nivel ${j.nivel}</span></td>
                     <td class="text-end">
-                        <!-- Botones de acciones por fila -->
-                        <button class="btn btn-sm btn-info btn-ver-torneos" data-id="${j.id}">Torneos</button>
-                        <button class="btn btn-sm btn-danger btn-eliminar-jugador" data-id="${j.id}">Eliminar</button>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary btn-ver-torneos" data-id="${j.id}" data-nick="${j.nick}" data-email="${j.email}" data-nivel="${j.nivel}">Ficha / Torneos</button>
+                            <button class="btn btn-outline-secondary btn-editar-jugador" data-id="${j.id}" data-nick="${j.nick}" data-email="${j.email}" data-nivel="${j.nivel}">Editar</button>
+                            <button class="btn btn-danger btn-eliminar-jugador" data-id="${j.id}">Eliminar</button>
+                        </div>
                     </td>
                 </tr>
             `;
-            // Añadir al desplegable para apuntar a un torneo
             selectIns.innerHTML += `<option value="${j.id}">${j.nick}</option>`;
         });
     } catch (e) { console.error("Error al cargar jugadores", e); }
 }
 
-// POST /jugadores: Crear un jugador nuevo
 document.getElementById('formJugador').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const nuevo = {
+    const idEdit = document.getElementById('jIdEdit').value;
+    const datosJugador = {
         nick: document.getElementById('jNick').value,
         email: document.getElementById('jEmail').value,
         nivel: parseInt(document.getElementById('jNivel').value)
     };
 
-    const res = await fetch(`${API_URL}/jugadores`, {
-        method: 'POST',
+    const url = idEdit ? `${API_URL}/jugadores/${idEdit}` : `${API_URL}/jugadores`;
+    const metodo = idEdit ? 'PUT' : 'POST';
+
+    const res = await fetch(url, {
+        method: metodo,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(nuevo)
+        body: JSON.stringify(datosJugador)
     });
 
     if (res.ok) {
-        document.getElementById('formJugador').reset();
+        resetearFormJugador();
         cargarJugadores();
-        alert("Jugador creado correctamente");
+        mostrarAviso(idEdit ? 'Jugador actualizado correctamente.' : 'Jugador dado de alta correctamente.', 'success');
     }
 });
 
-// GET /jugadores/{id}: Buscar jugador por ID
+function resetearFormJugador() {
+    document.getElementById('formJugador').reset();
+    document.getElementById('jIdEdit').value = '';
+    document.getElementById('tituloFormJugador').textContent = 'Alta de Jugador';
+    document.getElementById('btnJugador').textContent = 'Guardar Jugador';
+    document.getElementById('btnJugador').className = 'btn btn-success w-100';
+    document.getElementById('btnCancelarEdicionJugador').setAttribute('hidden', true);
+}
+
+document.getElementById('btnCancelarEdicionJugador').addEventListener('click', resetearFormJugador);
+
 document.getElementById('btnBuscarJugador').addEventListener('click', async () => {
     const id = document.getElementById('buscarJugadorId').value;
     if (!id) return;
@@ -161,108 +247,139 @@ document.getElementById('btnBuscarJugador').addEventListener('click', async () =
     
     if (res.ok) {
         const j = await res.json();
-        cajaRes.innerHTML = `<div class="alert alert-success">Encontrado: ${j.nick} (Nivel ${j.nivel})</div>`;
+        cajaRes.innerHTML = `<div class="alert alert-success mb-0">Jugador #${j.id}: <strong>${j.nick}</strong> (${j.email}) — Nivel ${j.nivel}</div>`;
     } else {
-        cajaRes.innerHTML = `<div class="alert alert-danger">Jugador no encontrado</div>`;
+        cajaRes.innerHTML = `<div class="alert alert-danger mb-0">No existe ningún jugador con ID ${id}</div>`;
     }
 });
 
-// Delegación de eventos para los botones dentro de la tabla de Jugadores
 document.getElementById('cuerpoJugadores').addEventListener('click', async (e) => {
     const id = e.target.getAttribute('data-id');
     if (!id) return;
 
-    // DELETE /jugadores/{id}: Eliminar jugador
+    // Cargar en formulario para editar
+    if (e.target.classList.contains('btn-editar-jugador')) {
+        document.getElementById('jIdEdit').value = id;
+        document.getElementById('jNick').value = e.target.getAttribute('data-nick');
+        document.getElementById('jEmail').value = e.target.getAttribute('data-email');
+        document.getElementById('jNivel').value = e.target.getAttribute('data-nivel');
+        
+        document.getElementById('tituloFormJugador').textContent = `Editando Jugador #${id}`;
+        document.getElementById('btnJugador').textContent = 'Actualizar Jugador';
+        document.getElementById('btnJugador').className = 'btn btn-primary w-100';
+        document.getElementById('btnCancelarEdicionJugador').removeAttribute('hidden');
+        document.getElementById('jNick').focus();
+    }
+
+    // Eliminar jugador
     if (e.target.classList.contains('btn-eliminar-jugador')) {
-        if(confirm("¿Seguro que quieres eliminar este jugador?")) {
+        if (confirm("¿Seguro que quieres eliminar este jugador?")) {
             await fetch(`${API_URL}/jugadores/${id}`, { method: 'DELETE' });
             cargarJugadores();
+            mostrarAviso('Jugador eliminado del sistema.', 'warning');
         }
     }
 
-    // GET /jugadores/{id}/participaciones: Ver en qué torneos está el jugador
+    // Ver ficha y torneos del jugador
     if (e.target.classList.contains('btn-ver-torneos')) {
+        const nick = e.target.getAttribute('data-nick');
+        const email = e.target.getAttribute('data-email');
+        const nivel = e.target.getAttribute('data-nivel');
+
         const res = await fetch(`${API_URL}/jugadores/${id}/participaciones`);
-        if(res.ok) {
+        if (res.ok) {
             const participaciones = await res.json();
             const panel = document.getElementById('panelTorneosJugador');
+            const infoFicha = document.getElementById('infoFichaJugador');
             const lista = document.getElementById('listaTorneosJugador');
             
-            panel.removeAttribute('hidden'); // Mostramos el panel lateral
-            lista.innerHTML = participaciones.length === 0 ? '<p>No participa en ningún torneo.</p>' : '';
+            document.getElementById('tituloTorneosJugador').textContent = `Ficha: ${nick}`;
+            infoFicha.innerHTML = `
+                <div class="p-2 bg-light rounded border small">
+                    <strong>ID:</strong> #${id} | <strong>Email:</strong> ${email} | <strong>Nivel:</strong> ${nivel}
+                </div>
+            `;
+            panel.removeAttribute('hidden');
+            lista.innerHTML = participaciones.length === 0 ? '<p class="text-muted small mb-0">No participa en ningún torneo todavía.</p>' : '';
             
-            // Pintamos cada torneo en el que participa
             participaciones.forEach(p => {
                 const nombreTorneo = p.torneo ? p.torneo.nombre : `Torneo ID: ${p.torneo.id}`;
-                lista.innerHTML += `<div class="alert alert-secondary">${nombreTorneo} (Puntos: ${p.puntos || 0})</div>`;
+                lista.innerHTML += `<div class="alert alert-light border py-2 mb-2 d-flex justify-content-between"><span>${nombreTorneo}</span><strong>${p.puntos || 0} pts</strong></div>`;
             });
         }
     }
 });
 
-
+// =========================================================
 // TORNEOS Y PARTICIPACIONES
-
-// GET /torneos: Cargar tabla y rellenar el desplegable de inscripciones
+// =========================================================
 async function cargarTorneos() {
     try {
         const res = await fetch(`${API_URL}/torneos`);
         const torneos = await res.json();
-        await pintarTablaTorneos(torneos); // Llamamos a la función asíncrona que pinta la tabla
+        
+        document.getElementById('kpiTorneos').textContent = torneos.length;
+        document.getElementById('kpiAbiertos').textContent = torneos.filter(t => t.estado === 'ABIERTO').length;
+
+        await pintarTablaTorneos(torneos);
 
         const selectIns = document.getElementById('insTorneo');
-        selectIns.innerHTML = '<option value="">-- Selecciona --</option>';
+        selectIns.innerHTML = '<option value="">Selecciona un torneo...</option>';
         torneos.forEach(t => {
-            selectIns.innerHTML += `<option value="${t.id}">${t.nombre}</option>`;
+            selectIns.innerHTML += `<option value="${t.id}">${t.nombre} (${t.estado})</option>`;
         });
     } catch (e) { console.error("Error al cargar torneos", e); }
 }
 
-// Función asíncrona para pintar la tabla de torneos (incluye consulta a participantes)
 async function pintarTablaTorneos(torneos) {
     const cuerpo = document.getElementById('cuerpoTorneos');
     cuerpo.innerHTML = '';
     
-    // Usamos for...of para poder usar await y buscar los participantes de cada torneo
+    if (torneos.length === 0) {
+        cuerpo.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-3">No hay torneos que coincidan con el filtro seleccionado.</td></tr>`;
+        return;
+    }
+
     for (const t of torneos) {
         const nombreJuego = t.videojuego ? t.videojuego.nombre : 'Sin juego';
-        let nombresJugadores = "Nadie inscrito";
+        let participantes = [];
         
-        // GET /torneos/{id}/participantes: Recuperar quién está apuntado a este torneo
         try {
             const res = await fetch(`${API_URL}/torneos/${t.id}/participantes`);
             if (res.ok) {
-                const participantes = await res.json();
-                if (participantes.length > 0) {
-                    // Extraemos los nicks y los unimos con comas
-                    nombresJugadores = participantes.map(p => p.jugador ? p.jugador.nick : 'Desconocido').join(', ');
-                }
+                participantes = await res.json();
             }
-        } catch (e) { console.error("Error al cargar participantes del torneo", t.id); }
+        } catch (e) { console.error("Error al cargar participantes", t.id); }
+
+        const resumenInscritos = participantes.length > 0
+            ? `${participantes.length} jugador(es)`
+            : 'Sin inscritos';
 
         cuerpo.innerHTML += `
             <tr>
                 <td>${t.id}</td>
-                <td>${t.nombre}</td>
+                <td class="fw-semibold">${t.nombre}</td>
+                <td>${renderBadgeEstado(t.estado)}</td>
                 <td>
-                    <!-- Select para cambiar el estado al vuelo -->
-                    <select class="form-select form-select-sm select-estado" data-id="${t.id}">
+                    <select class="form-select form-select-sm select-estado" data-id="${t.id}" aria-label="Cambiar estado">
                         <option value="ABIERTO" ${t.estado === 'ABIERTO' ? 'selected' : ''}>ABIERTO</option>
                         <option value="EN_CURSO" ${t.estado === 'EN_CURSO' ? 'selected' : ''}>EN_CURSO</option>
                         <option value="FINALIZADO" ${t.estado === 'FINALIZADO' ? 'selected' : ''}>FINALIZADO</option>
                     </select>
                 </td>
                 <td>${nombreJuego}</td>
-                <td>${nombresJugadores}</td>
+                <td><span class="badge bg-light text-dark border">${resumenInscritos}</span></td>
                 <td class="text-end">
-                    <button class="btn btn-sm btn-danger btn-eliminar-torneo" data-id="${t.id}">Eliminar</button>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary btn-detalle-torneo" data-id="${t.id}" data-nombre="${t.nombre}" data-estado="${t.estado}" data-juego="${nombreJuego}">Detalle</button>
+                        <button class="btn btn-danger btn-eliminar-torneo" data-id="${t.id}">Eliminar</button>
+                    </div>
                 </td>
             </tr>
         `;
     }
 }
 
-// PUT /torneos/{id}/estado: Se dispara automáticamente al cambiar el select en la tabla
 document.getElementById('cuerpoTorneos').addEventListener('change', async (e) => {
     if (e.target.classList.contains('select-estado')) {
         const id = e.target.getAttribute('data-id');
@@ -272,34 +389,79 @@ document.getElementById('cuerpoTorneos').addEventListener('change', async (e) =>
             method: 'PUT' 
         });
         
-        if (!res.ok) {
-            alert("Error al cambiar el estado en la base de datos.");
-            cargarTorneos(); // Recarga la tabla para restaurar el estado si hubo un error
-        }
-    }
-});
-
-// Delegación de eventos para la tabla Torneos (Eliminar)
-document.getElementById('cuerpoTorneos').addEventListener('click', async (e) => {
-    const id = e.target.getAttribute('data-id');
-    if (!id) return;
-
-    // DELETE /torneos/{id}
-    if (e.target.classList.contains('btn-eliminar-torneo')) {
-        if(confirm("¿Seguro que quieres eliminar este torneo?")) {
-            await fetch(`${API_URL}/torneos/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            cargarTorneos();
+            mostrarAviso(`Estado del torneo #${id} actualizado a ${nuevoEstado}.`, 'success');
+        } else {
+            mostrarAviso('Error al cambiar el estado en la base de datos.', 'danger');
             cargarTorneos();
         }
     }
 });
 
-// POST /torneos: Crear un torneo nuevo
+document.getElementById('cuerpoTorneos').addEventListener('click', async (e) => {
+    const id = e.target.getAttribute('data-id');
+    if (!id) return;
+
+    // Ver ficha detallada y participantes del torneo
+    if (e.target.classList.contains('btn-detalle-torneo')) {
+        const nombre = e.target.getAttribute('data-nombre');
+        const estado = e.target.getAttribute('data-estado');
+        const juego = e.target.getAttribute('data-juego');
+
+        const res = await fetch(`${API_URL}/torneos/${id}/participantes`);
+        const participantes = res.ok ? await res.json() : [];
+
+        const panel = document.getElementById('panelParticipantesTorneo');
+        document.getElementById('tituloParticipantesTorneo').textContent = `Torneo #${id}: ${nombre}`;
+        document.getElementById('subtituloParticipantesTorneo').innerHTML = `Videojuego: <strong>${juego}</strong> | Estado: ${renderBadgeEstado(estado)}`;
+
+        const lista = document.getElementById('listaParticipantesTorneo');
+        if (participantes.length === 0) {
+            lista.innerHTML = '<p class="text-muted small mb-0">Aún no hay jugadores inscritos en este torneo.</p>';
+        } else {
+            lista.innerHTML = participantes.map(p => `
+                <div class="d-flex justify-content-between align-items-center p-2 mb-2 bg-light rounded border">
+                    <span><strong>${p.jugador ? p.jugador.nick : 'Jugador'}</strong></span>
+                    <span class="badge bg-secondary">Puntos: ${p.puntos || 0} | Pos: ${p.posicion || '-'}</span>
+                </div>
+            `).join('');
+        }
+        panel.removeAttribute('hidden');
+    }
+
+    // Eliminar torneo
+    if (e.target.classList.contains('btn-eliminar-torneo')) {
+        if (confirm("¿Seguro que quieres eliminar este torneo?")) {
+            await fetch(`${API_URL}/torneos/${id}`, { method: 'DELETE' });
+            cargarTorneos();
+            mostrarAviso('Torneo eliminado correctamente.', 'warning');
+        }
+    }
+});
+
+// Buscar torneo por ID
+document.getElementById('btnBuscarTorneo').addEventListener('click', async () => {
+    const id = document.getElementById('buscarTorneoId').value;
+    if (!id) return;
+
+    const res = await fetch(`${API_URL}/torneos/${id}`);
+    const cajaRes = document.getElementById('resTorneo');
+
+    if (res.ok) {
+        const t = await res.json();
+        const juego = t.videojuego ? t.videojuego.nombre : 'Sin juego';
+        cajaRes.innerHTML = `<div class="alert alert-success mb-0 d-flex justify-content-between align-items-center"><span>Torneo #${t.id}: <strong>${t.nombre}</strong> (${juego})</span>${renderBadgeEstado(t.estado)}</div>`;
+    } else {
+        cajaRes.innerHTML = `<div class="alert alert-danger mb-0">No existe ningún torneo con ID ${id}</div>`;
+    }
+});
+
 document.getElementById('formTorneo').addEventListener('submit', async (e) => {
     e.preventDefault();
     const nuevo = {
         nombre: document.getElementById('tNombre').value,
         estado: document.getElementById('tEstado').value,
-        // JPA requiere que enviemos la relación como un objeto con su ID
         videojuego: { id: parseInt(document.getElementById('tVideojuego').value) } 
     };
 
@@ -312,20 +474,18 @@ document.getElementById('formTorneo').addEventListener('submit', async (e) => {
     if (res.ok) {
         document.getElementById('formTorneo').reset();
         cargarTorneos();
-        alert("Torneo creado");
+        mostrarAviso('Torneo creado y publicado correctamente.', 'success');
     } else {
-        alert("Error al crear el torneo. Revisa los datos.");
+        mostrarAviso('Error al crear el torneo. Revisa los campos.', 'danger');
     }
 });
 
-// GET /torneos (Filtros Avanzados)
 document.getElementById('btnFiltrarTorneos').addEventListener('click', async () => {
     const estado = document.getElementById('filtroEstado').value;
     const juegoId = document.getElementById('filtroJuego').value;
     
     let url = `${API_URL}/torneos`;
 
-    // Montamos la URL dependiendo de qué filtros haya seleccionado el usuario
     if (estado && juegoId) {
         url = `${API_URL}/torneos/videojuego/${juegoId}/estado/${estado}`;
     } else if (estado) {
@@ -337,11 +497,17 @@ document.getElementById('btnFiltrarTorneos').addEventListener('click', async () 
     const res = await fetch(url);
     if (res.ok) {
         const filtrados = await res.json();
-        await pintarTablaTorneos(filtrados); // Repintamos la tabla con los resultados
+        await pintarTablaTorneos(filtrados);
     }
 });
 
-// POST /participaciones: Inscribir un jugador en un torneo
+document.getElementById('btnResetFiltros').addEventListener('click', () => {
+    document.getElementById('filtroEstado').value = '';
+    document.getElementById('filtroJuego').value = '';
+    document.getElementById('resTorneo').innerHTML = '';
+    cargarTorneos();
+});
+
 document.getElementById('formInscripcion').addEventListener('submit', async (e) => {
     e.preventDefault();
     const nuevaInscripcion = {
@@ -359,14 +525,11 @@ document.getElementById('formInscripcion').addEventListener('submit', async (e) 
 
     if (res.ok) {
         document.getElementById('formInscripcion').reset();
-        cargarTorneos(); // Recargamos la tabla de torneos para que aparezca el nombre en la columna
-        alert("Jugador inscrito correctamente");
+        cargarTorneos();
+        mostrarAviso('Jugador inscrito en el torneo correctamente.', 'success');
     }
 });
 
-
-//  INICIALIZACIÓN
-// Esto arranca todas las peticiones cuando el HTML termina de cargar
 document.addEventListener('DOMContentLoaded', () => {
     comprobarConexion();
     cargarVideojuegos();
