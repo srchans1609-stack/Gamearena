@@ -52,7 +52,7 @@ async function comprobarConexion() {
     } catch (e) {
         badge.textContent = 'Backend desconectado';
         badge.className = 'badge bg-danger';
-        aviso.textContent = 'Aviso: El servidor Spring Boot (puerto 8080) no responde. Puedes navegar por las pantallas de diseño.';
+        aviso.textContent = 'Aviso: El servidor Spring Boot (puerto 8080) no responde. Comprueba que está arrancado en IntelliJ.';
         aviso.className = 'alert alert-warning mb-4';
         aviso.style.display = 'block';
     }
@@ -65,13 +65,13 @@ async function cargarVideojuegos() {
     try {
         const res = await fetch(`${API_URL}/videojuegos`);
         const videojuegos = await res.json();
-        
+
         document.getElementById('kpiJuegos').textContent = videojuegos.length;
 
         const cuerpo = document.getElementById('cuerpoJuegos');
         const selectTorneo = document.getElementById('tVideojuego');
         const filtroJuego = document.getElementById('filtroJuego');
-        
+
         cuerpo.innerHTML = '';
         selectTorneo.innerHTML = '<option value="">Selecciona un videojuego...</option>';
         filtroJuego.innerHTML = '<option value="">Todos los videojuegos</option>';
@@ -93,7 +93,9 @@ async function cargarVideojuegos() {
             selectTorneo.innerHTML += `<option value="${juego.id}">${juego.nombre}</option>`;
             filtroJuego.innerHTML += `<option value="${juego.id}">${juego.nombre}</option>`;
         });
-    } catch (e) { console.error("Error al cargar videojuegos", e); }
+    } catch (e) {
+        console.error("Error al cargar videojuegos", e);
+    }
 }
 
 document.getElementById('formJuego').addEventListener('submit', async (e) => {
@@ -119,10 +121,10 @@ document.getElementById('formJuego').addEventListener('submit', async (e) => {
 document.getElementById('btnBuscarJuego').addEventListener('click', async () => {
     const id = document.getElementById('buscarJuegoId').value;
     if (!id) return;
-    
+
     const res = await fetch(`${API_URL}/videojuegos/${id}`);
     const cajaRes = document.getElementById('resJuego');
-    
+
     if (res.ok) {
         const j = await res.json();
         cajaRes.innerHTML = `<div class="alert alert-success mb-0">Videojuego #${j.id}: <strong>${j.nombre}</strong> — Género: ${j.genero}</div>`;
@@ -131,14 +133,15 @@ document.getElementById('btnBuscarJuego').addEventListener('click', async () => 
     }
 });
 
-// Acciones en la tabla de Videojuegos (Ficha y Salto a sus torneos)
 document.getElementById('cuerpoJuegos').addEventListener('click', async (e) => {
-    const id = e.target.getAttribute('data-id');
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const id = btn.getAttribute('data-id');
     if (!id) return;
 
-    if (e.target.classList.contains('btn-ficha-juego')) {
-        const nombre = e.target.getAttribute('data-nombre');
-        const genero = e.target.getAttribute('data-genero');
+    if (btn.classList.contains('btn-ficha-juego')) {
+        const nombre = btn.getAttribute('data-nombre');
+        const genero = btn.getAttribute('data-genero');
         const panel = document.getElementById('panelFichaJuego');
         document.getElementById('tituloFichaJuego').textContent = `Ficha: ${nombre}`;
         document.getElementById('contenidoFichaJuego').innerHTML = `
@@ -149,7 +152,7 @@ document.getElementById('cuerpoJuegos').addEventListener('click', async (e) => {
         panel.removeAttribute('hidden');
     }
 
-    if (e.target.classList.contains('btn-torneos-juego')) {
+    if (btn.classList.contains('btn-torneos-juego')) {
         irATorneosDeJuego(id);
     }
 });
@@ -172,12 +175,12 @@ async function cargarJugadores() {
     try {
         const res = await fetch(`${API_URL}/jugadores`);
         const jugadores = await res.json();
-        
+
         document.getElementById('kpiJugadores').textContent = jugadores.length;
 
         const cuerpo = document.getElementById('cuerpoJugadores');
         const selectIns = document.getElementById('insJugador');
-        
+
         cuerpo.innerHTML = '';
         selectIns.innerHTML = '<option value="">Selecciona un jugador...</option>';
 
@@ -199,7 +202,9 @@ async function cargarJugadores() {
             `;
             selectIns.innerHTML += `<option value="${j.id}">${j.nick}</option>`;
         });
-    } catch (e) { console.error("Error al cargar jugadores", e); }
+    } catch (e) {
+        console.error("Error al cargar jugadores", e);
+    }
 }
 
 document.getElementById('formJugador').addEventListener('submit', async (e) => {
@@ -241,10 +246,10 @@ document.getElementById('btnCancelarEdicionJugador').addEventListener('click', r
 document.getElementById('btnBuscarJugador').addEventListener('click', async () => {
     const id = document.getElementById('buscarJugadorId').value;
     if (!id) return;
-    
+
     const res = await fetch(`${API_URL}/jugadores/${id}`);
     const cajaRes = document.getElementById('resJugador');
-    
+
     if (res.ok) {
         const j = await res.json();
         cajaRes.innerHTML = `<div class="alert alert-success mb-0">Jugador #${j.id}: <strong>${j.nick}</strong> (${j.email}) — Nivel ${j.nivel}</div>`;
@@ -254,16 +259,18 @@ document.getElementById('btnBuscarJugador').addEventListener('click', async () =
 });
 
 document.getElementById('cuerpoJugadores').addEventListener('click', async (e) => {
-    const id = e.target.getAttribute('data-id');
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const id = btn.getAttribute('data-id');
     if (!id) return;
 
-    // Cargar en formulario para editar
-    if (e.target.classList.contains('btn-editar-jugador')) {
+    // 1. Editar jugador
+    if (btn.classList.contains('btn-editar-jugador')) {
         document.getElementById('jIdEdit').value = id;
-        document.getElementById('jNick').value = e.target.getAttribute('data-nick');
-        document.getElementById('jEmail').value = e.target.getAttribute('data-email');
-        document.getElementById('jNivel').value = e.target.getAttribute('data-nivel');
-        
+        document.getElementById('jNick').value = btn.getAttribute('data-nick');
+        document.getElementById('jEmail').value = btn.getAttribute('data-email');
+        document.getElementById('jNivel').value = btn.getAttribute('data-nivel');
+
         document.getElementById('tituloFormJugador').textContent = `Editando Jugador #${id}`;
         document.getElementById('btnJugador').textContent = 'Actualizar Jugador';
         document.getElementById('btnJugador').className = 'btn btn-primary w-100';
@@ -271,8 +278,8 @@ document.getElementById('cuerpoJugadores').addEventListener('click', async (e) =
         document.getElementById('jNick').focus();
     }
 
-    // Eliminar jugador
-    if (e.target.classList.contains('btn-eliminar-jugador')) {
+    // 2. Eliminar jugador
+    if (btn.classList.contains('btn-eliminar-jugador')) {
         if (confirm("¿Seguro que quieres eliminar este jugador?")) {
             await fetch(`${API_URL}/jugadores/${id}`, { method: 'DELETE' });
             cargarJugadores();
@@ -280,30 +287,52 @@ document.getElementById('cuerpoJugadores').addEventListener('click', async (e) =
         }
     }
 
-    // Ver ficha y torneos del jugador
-    if (e.target.classList.contains('btn-ver-torneos')) {
-        const nick = e.target.getAttribute('data-nick');
-        const email = e.target.getAttribute('data-email');
-        const nivel = e.target.getAttribute('data-nivel');
+    // 3. Ver ficha y torneos del jugador
+    if (btn.classList.contains('btn-ver-torneos')) {
+        const nick = btn.getAttribute('data-nick');
+        const email = btn.getAttribute('data-email');
+        const nivel = btn.getAttribute('data-nivel');
 
-        const res = await fetch(`${API_URL}/jugadores/${id}/participaciones`);
-        if (res.ok) {
-            const participaciones = await res.json();
-            const panel = document.getElementById('panelTorneosJugador');
-            const infoFicha = document.getElementById('infoFichaJugador');
-            const lista = document.getElementById('listaTorneosJugador');
-            
-            document.getElementById('tituloTorneosJugador').textContent = `Ficha: ${nick}`;
-            infoFicha.innerHTML = `
-                <div class="p-2 bg-light rounded border small">
-                    <strong>ID:</strong> #${id} | <strong>Email:</strong> ${email} | <strong>Nivel:</strong> ${nivel}
-                </div>
-            `;
-            panel.removeAttribute('hidden');
-            lista.innerHTML = participaciones.length === 0 ? '<p class="text-muted small mb-0">No participa en ningún torneo todavía.</p>' : '';
-            
+        const panel = document.getElementById('panelTorneosJugador');
+        const infoFicha = document.getElementById('infoFichaJugador');
+        const lista = document.getElementById('listaTorneosJugador');
+
+        document.getElementById('tituloTorneosJugador').textContent = `Ficha: ${nick}`;
+        infoFicha.innerHTML = `
+            <div class="p-2 bg-light rounded border small">
+                <strong>ID:</strong> #${id} | <strong>Email:</strong> ${email} | <strong>Nivel:</strong> ${nivel}
+            </div>
+        `;
+        lista.innerHTML = '<p class="text-muted small mb-0">Cargando participaciones...</p>';
+        panel.removeAttribute('hidden');
+
+        const rutasPosibles = [
+            `${API_URL}/jugadores/${id}/participaciones`,
+            `${API_URL}/participaciones/jugador/${id}`,
+            `${API_URL}/jugadores/${id}/torneos`
+        ];
+
+        let participaciones = null;
+        for (const url of rutasPosibles) {
+            try {
+                const res = await fetch(url);
+                if (res.ok) {
+                    participaciones = await res.json();
+                    break;
+                }
+            } catch (err) {
+                console.error("Error consultando:", url, err);
+            }
+        }
+
+        if (participaciones === null) {
+            lista.innerHTML = '<p class="text-danger small mb-0">No se pudo cargar la lista de torneos (revisa la ruta del Controller).</p>';
+        } else if (participaciones.length === 0) {
+            lista.innerHTML = '<p class="text-muted small mb-0">No participa en ningún torneo todavía.</p>';
+        } else {
+            lista.innerHTML = '';
             participaciones.forEach(p => {
-                const nombreTorneo = p.torneo ? p.torneo.nombre : `Torneo ID: ${p.torneo.id}`;
+                const nombreTorneo = p.torneo ? p.torneo.nombre : (p.nombre || 'Torneo inscrito');
                 lista.innerHTML += `<div class="alert alert-light border py-2 mb-2 d-flex justify-content-between"><span>${nombreTorneo}</span><strong>${p.puntos || 0} pts</strong></div>`;
             });
         }
@@ -317,7 +346,7 @@ async function cargarTorneos() {
     try {
         const res = await fetch(`${API_URL}/torneos`);
         const torneos = await res.json();
-        
+
         document.getElementById('kpiTorneos').textContent = torneos.length;
         document.getElementById('kpiAbiertos').textContent = torneos.filter(t => t.estado === 'ABIERTO').length;
 
@@ -328,13 +357,15 @@ async function cargarTorneos() {
         torneos.forEach(t => {
             selectIns.innerHTML += `<option value="${t.id}">${t.nombre} (${t.estado})</option>`;
         });
-    } catch (e) { console.error("Error al cargar torneos", e); }
+    } catch (e) {
+        console.error("Error al cargar torneos", e);
+    }
 }
 
 async function pintarTablaTorneos(torneos) {
     const cuerpo = document.getElementById('cuerpoTorneos');
     cuerpo.innerHTML = '';
-    
+
     if (torneos.length === 0) {
         cuerpo.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-3">No hay torneos que coincidan con el filtro seleccionado.</td></tr>`;
         return;
@@ -343,13 +374,15 @@ async function pintarTablaTorneos(torneos) {
     for (const t of torneos) {
         const nombreJuego = t.videojuego ? t.videojuego.nombre : 'Sin juego';
         let participantes = [];
-        
+
         try {
             const res = await fetch(`${API_URL}/torneos/${t.id}/participantes`);
             if (res.ok) {
                 participantes = await res.json();
             }
-        } catch (e) { console.error("Error al cargar participantes", t.id); }
+        } catch (e) {
+            console.error("Error al cargar participantes", t.id);
+        }
 
         const resumenInscritos = participantes.length > 0
             ? `${participantes.length} jugador(es)`
@@ -384,11 +417,11 @@ document.getElementById('cuerpoTorneos').addEventListener('change', async (e) =>
     if (e.target.classList.contains('select-estado')) {
         const id = e.target.getAttribute('data-id');
         const nuevoEstado = e.target.value;
-        
-        const res = await fetch(`${API_URL}/torneos/${id}/estado?estado=${nuevoEstado}`, { 
-            method: 'PUT' 
+
+        const res = await fetch(`${API_URL}/torneos/${id}/estado?estado=${nuevoEstado}`, {
+            method: 'PUT'
         });
-        
+
         if (res.ok) {
             cargarTorneos();
             mostrarAviso(`Estado del torneo #${id} actualizado a ${nuevoEstado}.`, 'success');
@@ -400,14 +433,15 @@ document.getElementById('cuerpoTorneos').addEventListener('change', async (e) =>
 });
 
 document.getElementById('cuerpoTorneos').addEventListener('click', async (e) => {
-    const id = e.target.getAttribute('data-id');
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const id = btn.getAttribute('data-id');
     if (!id) return;
 
-    // Ver ficha detallada y participantes del torneo
-    if (e.target.classList.contains('btn-detalle-torneo')) {
-        const nombre = e.target.getAttribute('data-nombre');
-        const estado = e.target.getAttribute('data-estado');
-        const juego = e.target.getAttribute('data-juego');
+    if (btn.classList.contains('btn-detalle-torneo')) {
+        const nombre = btn.getAttribute('data-nombre');
+        const estado = btn.getAttribute('data-estado');
+        const juego = btn.getAttribute('data-juego');
 
         const res = await fetch(`${API_URL}/torneos/${id}/participantes`);
         const participantes = res.ok ? await res.json() : [];
@@ -430,8 +464,7 @@ document.getElementById('cuerpoTorneos').addEventListener('click', async (e) => 
         panel.removeAttribute('hidden');
     }
 
-    // Eliminar torneo
-    if (e.target.classList.contains('btn-eliminar-torneo')) {
+    if (btn.classList.contains('btn-eliminar-torneo')) {
         if (confirm("¿Seguro que quieres eliminar este torneo?")) {
             await fetch(`${API_URL}/torneos/${id}`, { method: 'DELETE' });
             cargarTorneos();
@@ -440,7 +473,6 @@ document.getElementById('cuerpoTorneos').addEventListener('click', async (e) => 
     }
 });
 
-// Buscar torneo por ID
 document.getElementById('btnBuscarTorneo').addEventListener('click', async () => {
     const id = document.getElementById('buscarTorneoId').value;
     if (!id) return;
@@ -462,7 +494,7 @@ document.getElementById('formTorneo').addEventListener('submit', async (e) => {
     const nuevo = {
         nombre: document.getElementById('tNombre').value,
         estado: document.getElementById('tEstado').value,
-        videojuego: { id: parseInt(document.getElementById('tVideojuego').value) } 
+        videojuego: { id: parseInt(document.getElementById('tVideojuego').value) }
     };
 
     const res = await fetch(`${API_URL}/torneos`, {
@@ -483,7 +515,7 @@ document.getElementById('formTorneo').addEventListener('submit', async (e) => {
 document.getElementById('btnFiltrarTorneos').addEventListener('click', async () => {
     const estado = document.getElementById('filtroEstado').value;
     const juegoId = document.getElementById('filtroJuego').value;
-    
+
     let url = `${API_URL}/torneos`;
 
     if (estado && juegoId) {
@@ -517,7 +549,7 @@ document.getElementById('formInscripcion').addEventListener('submit', async (e) 
         posicion: 0
     };
 
-    const res = await fetch(`${API_URL}/participaciones`, { 
+    const res = await fetch(`${API_URL}/participaciones`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevaInscripcion)
@@ -530,6 +562,9 @@ document.getElementById('formInscripcion').addEventListener('submit', async (e) 
     }
 });
 
+// =========================================================
+// INICIALIZACIÓN
+// =========================================================
 document.addEventListener('DOMContentLoaded', () => {
     comprobarConexion();
     cargarVideojuegos();

@@ -1,207 +1,372 @@
-
-/* 1. Variables de Color con Roles Definidos */
+/* =========================================================
+   GAMEARENA — SIMPLE, RESPONSIVE, DARK & LIME (FULL BRANDED)
+   ========================================================= */
 :root {
-  --primary-color: #0d6efd;
-  --primary-dark: #0a58ca;
-  --accent-color: #6f42c1;
-  --dark-surface: #181c24;
-  --dark-surface-alt: #232936;
-  --bg-gradient: linear-gradient(135deg, #f4f6f9 0%, #e6ebf2 100%);
-  --hover-bg: rgba(13, 110, 253, 0.05);
-  --transition-speed: 0.2s ease-in-out;
+  --bg-deep: #070b11;
+  --bg-topbar: #0a1019;
+  --bg-panel: #0f1824;
+  --bg-subpanel: #0b121c;
+  --border-gc: rgba(255, 255, 255, 0.08);
+  
+  --accent-lime: #c4f135;
+  --accent-lime-hover: #d4f85c;
+  --text-muted-gc: #94a3b8;
 }
 
-/* 2. Tipografía y Lienzo General */
 body {
-  background: var(--bg-gradient);
-  min-height: 100vh;
+  background-color: var(--bg-deep);
+  color: #f1f5f9;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #212529;
-  line-height: 1.5;
+  margin: 0;
+  min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6, .logo-badge {
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+h1, h2, h3, h4, h5, h6, .gc-brand-text, .gc-page-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.02em;
 }
 
-/* 3. Encabezado e Identidad */
-header {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
-  border-left: 5px solid var(--primary-color);
-  background: linear-gradient(90deg, var(--dark-surface) 0%, var(--dark-surface-alt) 100%) !important;
+.text-lime { color: var(--accent-lime) !important; }
+.text-gc-muted { color: var(--text-muted-gc); }
+.border-gc { border-color: var(--border-gc) !important; }
+
+/* Cabecera superior */
+.gc-topbar {
+  background-color: rgba(10, 16, 25, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-gc);
+  z-index: 1030;
 }
 
-.logo-badge {
+/* Nuevo contenedor y efecto del Logotipo GameArena */
+.gc-logo-container {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-  color: #ffffff;
-  border-radius: 10px;
+  border-radius: 50%;
+  background-color: var(--bg-subpanel);
+  border: 1px solid rgba(196, 241, 53, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.35rem;
-  box-shadow: 0 2px 8px rgba(111, 66, 193, 0.4);
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(196, 241, 53, 0.15);
+  transition: all 0.2s ease-in-out;
 }
 
-.badge-accent {
-  background-color: var(--accent-color);
+.gc-logo-container:hover {
+  border-color: var(--accent-lime);
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(196, 241, 53, 0.3);
+}
+
+.gc-logo-img {
+  width: 110%;
+  height: 110%;
+  object-fit: contain;
+}
+
+.gc-brand-text {
+  font-size: 1.3rem;
+  font-weight: 800;
   color: #ffffff;
-  font-weight: 600;
-  letter-spacing: 0.6px;
 }
 
-/* 4. Tarjetas y Agrupación Gestalt */
-.card {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+/* Navegación adaptable a móvil (scroll horizontal sin desbordar) */
+.gc-nav-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.gc-nav-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.gc-nav {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-gc);
+  padding: 5px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-  transition: box-shadow var(--transition-speed);
+  display: inline-flex;
+  gap: 4px;
+  min-width: max-content;
 }
 
-.card:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-.hero-card {
-  border-top: 4px solid var(--accent-color);
-}
-
-.filter-box {
-  background-color: #f8f9fb !important;
-  border-color: #dee2e6 !important;
-}
-
-/* 5. Pestañas de Navegación */
-.nav-tabs {
-  border-bottom: 2px solid #dee2e6;
-}
-
-.nav-tabs .nav-link {
-  color: #495057;
+.gc-nav .nav-link {
+  color: #cbd5e1;
+  font-size: 0.92rem;
   font-weight: 600;
-  border: none;
-  border-bottom: 3px solid transparent;
-  border-radius: 8px 8px 0 0;
-  transition: all var(--transition-speed);
-  padding: 10px 18px;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  transition: all 0.15s ease;
 }
 
-.nav-tabs .nav-link:hover {
-  color: var(--primary-color);
-  background-color: rgba(13, 110, 253, 0.05);
+.gc-nav .nav-link:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
-.nav-tabs .nav-link.active {
-  color: var(--primary-color);
-  background-color: #ffffff;
-  border-bottom: 3px solid var(--primary-color);
+.gc-nav .nav-link.active {
+  background-color: var(--accent-lime);
+  color: #070b11;
   font-weight: 700;
 }
 
-/* 6. Estados de Torneos (Color + Texto de Alto Contraste) */
+/* =========================================================
+   BOTONES (LIMA Y GRISES TOTALMENTE VISIBLES)
+   ========================================================= */
+.btn-lime {
+  background-color: var(--accent-lime);
+  border: 1px solid var(--accent-lime);
+  color: #070b11;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+}
+
+.btn-lime:hover {
+  background-color: var(--accent-lime-hover);
+  border-color: var(--accent-lime-hover);
+  color: #070b11;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(196, 241, 53, 0.25);
+}
+
+/* Botones grises principales (.btn-gc-glass) */
+.btn-gc-glass {
+  background-color: #1e293b;
+  border: 1px solid #475569;
+  color: #f8fafc;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+}
+
+.btn-gc-glass:hover {
+  background-color: #334155;
+  border-color: #94a3b8;
+  color: #ffffff;
+}
+
+/* Botones grises de Bootstrap inyectados por JS (.btn-secondary, etc) */
+.btn-secondary,
+.btn-outline-secondary {
+  background-color: #1e293b !important;
+  border: 1px solid #475569 !important;
+  color: #f1f5f9 !important;
+  font-weight: 600;
+  border-radius: 7px;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover,
+.btn-outline-secondary:hover {
+  background-color: #334155 !important;
+  border-color: #94a3b8 !important;
+  color: #ffffff !important;
+}
+
+/* Banner Principal */
+.gc-page-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.25rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.gc-hero-banner {
+  background: linear-gradient(120deg, #102036 0%, #162c4a 60%, #0d192b 100%);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 16px;
+}
+
+.gc-pill-tag {
+  background: rgba(196, 241, 53, 0.12);
+  border: 1px solid rgba(196, 241, 53, 0.35);
+  color: var(--accent-lime);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.art-ring {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 241, 53, 0.16) 0%, rgba(16, 32, 54, 0.4) 70%);
+  border: 1px solid rgba(196, 241, 53, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.8rem;
+  color: var(--accent-lime);
+}
+
+/* Paneles e Inputs */
+.gc-panel {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-gc);
+  border-radius: 14px;
+}
+
+.gc-subpanel {
+  background-color: var(--bg-subpanel);
+  border: 1px solid var(--border-gc);
+  border-radius: 10px;
+}
+
+.gc-detail {
+  border-left: 3px solid var(--accent-lime);
+}
+
+.gc-input {
+  background-color: var(--bg-subpanel) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  padding: 0.55rem 0.8rem;
+}
+
+.gc-input:focus {
+  border-color: var(--accent-lime) !important;
+  box-shadow: 0 0 0 3px rgba(196, 241, 53, 0.15) !important;
+}
+
+/* =========================================================
+   TABLAS AJUSTADAS (ESCRITORIO Y MÓVIL)
+   ========================================================= */
+.table-responsive {
+  border: 1px solid var(--border-gc);
+  border-radius: 10px;
+  background-color: rgba(11, 18, 28, 0.45);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gc-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: #f1f5f9;
+  --bs-table-border-color: var(--border-gc);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.03);
+  width: 100%;
+  margin-bottom: 0;
+  font-size: 0.92rem;
+}
+
+.gc-table thead th {
+  background-color: var(--bg-subpanel);
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.95rem 1.1rem;
+  white-space: nowrap;
+}
+
+.gc-table tbody td {
+  padding: 0.9rem 1.1rem;
+  border-bottom: 1px solid var(--border-gc);
+  vertical-align: middle;
+}
+
+.gc-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Columna ID compacta */
+.gc-table th:first-child,
+.gc-table td:first-child {
+  width: 64px;
+  color: var(--text-muted-gc);
+  font-weight: 600;
+}
+
+/* Columna acciones con espacio suficiente */
+.gc-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gc-table td:last-child .btn {
+  margin-left: 4px;
+}
+
+/* Selectores dentro de la tabla */
+.gc-table select.form-select {
+  min-width: 135px;
+  background-color: #0b121c !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
+  border-radius: 7px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.84rem;
+}
+
+.gc-table select.form-select:focus {
+  border-color: var(--accent-lime) !important;
+  box-shadow: 0 0 0 2px rgba(196, 241, 53, 0.2) !important;
+}
+
+/* Estados de torneos */
 .estado-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0.35em 0.75em;
-  border-radius: 999px;
-  font-size: 0.78rem;
+  padding: 0.35em 0.8em;
+  border-radius: 6px;
+  font-size: 0.74rem;
   font-weight: 700;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
 .estado-abierto {
-  background-color: #d1e7dd;
-  color: #0a3622;
-  border: 1px solid #a3cfbb;
+  background-color: rgba(196, 241, 53, 0.14);
+  color: var(--accent-lime);
+  border: 1px solid rgba(196, 241, 53, 0.35);
 }
 
 .estado-en-curso {
-  background-color: #fff3cd;
-  color: #664d03;
-  border: 1px solid #ffe69c;
+  background-color: rgba(250, 204, 21, 0.14);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.35);
 }
 
 .estado-finalizado {
-  background-color: #e2e3e5;
-  color: #2b2f32;
-  border: 1px solid #c4c8cb;
+  background-color: rgba(148, 163, 184, 0.16);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.35);
 }
 
-/* 7. Tablas */
-.table {
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 0;
-}
-
-.table thead th {
-  background-color: var(--dark-surface);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.table tbody tr {
-  transition: background-color var(--transition-speed);
-}
-
-.table tbody tr:hover {
-  background-color: var(--hover-bg);
-}
-
-/* 8. Botones y Formularios */
-.btn {
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all var(--transition-speed);
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-.form-label {
-  font-weight: 600;
-  color: #343a40;
-}
-
-.form-control, .form-select {
-  border-radius: 8px;
-  border: 1px solid #ced4da;
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-}
-
-/* 9. Paneles de Ficha / Detalle */
-#panelTorneosJugador,
-#panelParticipantesTorneo,
-#panelFichaJuego {
-  border-left: 4px solid var(--accent-color);
-  animation: fadeIn 0.25s ease-in-out;
+/* Adaptación de elementos generados por script.js */
+.badge.bg-light,
+.gc-detail .bg-light,
+.gc-detail .alert-light {
+  background-color: var(--bg-subpanel) !important;
+  color: #f1f5f9 !important;
+  border-color: var(--border-gc) !important;
 }
 
 [hidden] {
   display: none !important;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Adaptaciones móviles (< 768px) */
+@media (max-width: 767.98px) {
+  .gc-table thead th,
+  .gc-table tbody td {
+    padding: 0.75rem 0.8rem;
+    font-size: 0.85rem;
+  }
 }
 
-/* 10. Adaptabilidad Móvil */
-@media (max-width: 768px) {
-  .nav-tabs .nav-link {
-    padding: 8px 12px;
-    font-size: 0.9rem;
+/* Tamaño del logo en móviles muy pequeños */
+@media (max-width: 575.98px) {
+  .gc-logo-container {
+    width: 38px;
+    height: 38px;
   }
 }

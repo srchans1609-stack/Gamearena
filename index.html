@@ -1,154 +1,194 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GameArena — Gestión de Torneos Esports</title>
   
-  <!-- Bootstrap 5 -->
+  <!-- Bootstrap 5.3 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Tipografías Google Fonts: Rajdhani (Títulos) e Inter (Cuerpo y Tablas) -->
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Tipografías -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <!-- Estilos personalizados -->
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="p-2 p-md-4">
-  <div class="container">
-
-    <!-- CABECERA PRINCIPAL -->
-    <header class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-3 text-white rounded mb-3">
-      <div class="d-flex align-items-center gap-3">
-        <div class="logo-badge">GA</div>
-        <div>
-          <h1 class="h3 m-0">GameArena</h1>
-          <small class="text-light opacity-75">Plataforma de Gestión de Competiciones Esports</small>
+<body>
+  <!-- CABECERA SIMPLE Y LIMPIA CON LOGO OFICIAL GAMEARENA -->
+  <header class="gc-topbar sticky-top mb-3 mb-md-4">
+    <div class="container-fluid px-3 px-md-4 px-xl-5 py-3 d-flex justify-content-between align-items-center gap-2">
+      <a href="#" class="d-flex align-items-center gap-3 text-decoration-none btn-ir-tab" data-target="#tabInicio">
+        <div class="gc-logo-container">
+          <img src="logo.jpg" alt="GameArena Logo" class="gc-logo-img">
         </div>
-      </div>
-      <span id="conexion" class="badge bg-secondary">Comprobando API...</span>
-    </header>
+        <span class="gc-brand-text">GameArena</span>
+      </a>
 
-    <!-- ZONA DE FEEDBACK VISUAL (Éxito, Aviso o Error) -->
-    <div id="aviso" class="alert alert-warning mb-4" role="alert" style="display: none;"></div>
+      <span id="conexion" class="badge bg-secondary px-3 py-2 rounded-pill">Comprobando API...</span>
+    </div>
+  </header>
 
-    <!-- NAVEGACIÓN PRINCIPAL POR PESTAÑAS -->
-    <ul class="nav nav-tabs mb-4" id="navTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="tabInicio" data-bs-toggle="tab" data-bs-target="#panel-inicio" type="button" role="tab">Inicio</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tabTorneos" data-bs-toggle="tab" data-bs-target="#panel-torneos" type="button" role="tab">Torneos</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tabJugadores" data-bs-toggle="tab" data-bs-target="#panel-jugadores" type="button" role="tab">Jugadores</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="tabVideojuegos" data-bs-toggle="tab" data-bs-target="#panel-videojuegos" type="button" role="tab">Videojuegos</button>
-      </li>
-    </ul>
+  <!-- CONTENIDO PRINCIPAL RESPONSIVE -->
+  <main class="container-fluid px-3 px-md-4 px-xl-5 pb-5">
 
-    <!-- CONTENIDO DE LAS PANTALLAS -->
+    <!-- ALERTA DE FEEDBACK -->
+    <div id="aviso" class="alert alert-warning mb-3" role="alert" style="display: none;"></div>
+
+    <!-- NAVEGACIÓN ÚNICA (ADAPTABLE A MÓVIL Y ESCRITORIO) -->
+    <nav class="gc-nav-wrapper mb-4">
+      <ul class="nav nav-pills gc-nav flex-nowrap" id="navTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="tabInicio" data-bs-toggle="tab" data-bs-target="#panel-inicio" type="button" role="tab">
+            <i class="bi bi-house-door me-1"></i> Inicio
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tabTorneos" data-bs-toggle="tab" data-bs-target="#panel-torneos" type="button" role="tab">
+            <i class="bi bi-trophy me-1"></i> Torneos
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tabJugadores" data-bs-toggle="tab" data-bs-target="#panel-jugadores" type="button" role="tab">
+            <i class="bi bi-people me-1"></i> Jugadores
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tabVideojuegos" data-bs-toggle="tab" data-bs-target="#panel-videojuegos" type="button" role="tab">
+            <i class="bi bi-controller me-1"></i> Juegos
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- PANTALLAS -->
     <div class="tab-content">
 
       <!-- =========================================================
            1. PANTALLA DE INICIO
            ========================================================= -->
       <div class="tab-pane fade show active" id="panel-inicio" role="tabpanel">
-        <div class="card hero-card p-4 mb-4">
+        
+        <!-- Banner Principal -->
+        <div class="gc-hero-banner p-4 p-md-5 mb-4">
           <div class="row align-items-center g-4">
             <div class="col-lg-8">
-              <span class="badge badge-accent mb-2">TEMPORADA 2026</span>
-              <h2 class="display-6 fw-bold mb-2">Control centralizado de torneos y jugadores</h2>
-              <p class="text-muted mb-4">
-                Administra competiciones oficiales de <strong>Valorant</strong>, <strong>League of Legends</strong>, <strong>Rocket League</strong>, <strong>Fortnite</strong> y <strong>EA Sports FC</strong>. Consulta estados en tiempo real, filtra eventos abiertos e inscribe participantes desde una única interfaz.
+              <span class="gc-pill-tag mb-3 d-inline-block">Temporada Competitiva 2026</span>
+              <h1 class="gc-page-title mb-3">
+                Torneos de videojuegos por <span class="text-lime">habilidad</span>
+              </h1>
+              <p class="text-light opacity-75 mb-4" style="max-width: 680px;">
+                Gestiona competiciones oficiales de <strong>Valorant</strong>, <strong>League of Legends</strong>, <strong>Rocket League</strong>, <strong>Fortnite</strong> y <strong>EA Sports FC</strong> desde un panel rápido y directo.
               </p>
-              <div class="d-flex flex-wrap gap-2">
-                <button type="button" class="btn btn-primary btn-ir-tab" data-target="#tabTorneos">Gestionar Torneos</button>
-                <button type="button" class="btn btn-outline-primary btn-ir-tab" data-target="#tabJugadores">Ver Jugadores</button>
-                <button type="button" class="btn btn-outline-secondary btn-ir-tab" data-target="#tabVideojuegos">Catálogo de Juegos</button>
+              <div class="d-grid d-sm-flex flex-wrap gap-2 gap-sm-3">
+                <button type="button" class="btn btn-lime px-4 py-2 btn-ir-tab" data-target="#tabTorneos">
+                  Gestionar Torneos
+                </button>
+                <button type="button" class="btn btn-gc-glass px-4 py-2 btn-ir-tab" data-target="#tabJugadores">
+                  Ver Jugadores
+                </button>
+                <button type="button" class="btn btn-gc-glass px-4 py-2 btn-ir-tab" data-target="#tabVideojuegos">
+                  Catálogo de Juegos
+                </button>
               </div>
             </div>
-            <div class="col-lg-4">
-              <div class="p-3 bg-light rounded border">
-                <h6 class="text-uppercase text-muted fw-bold small mb-3">Estado del sistema</h6>
-                <div class="d-flex justify-content-between py-2 border-bottom">
-                  <span>Torneos registrados</span>
-                  <strong id="kpiTorneos" class="text-primary">0</strong>
-                </div>
-                <div class="d-flex justify-content-between py-2 border-bottom">
-                  <span>Torneos abiertos</span>
-                  <strong id="kpiAbiertos" class="text-success">0</strong>
-                </div>
-                <div class="d-flex justify-content-between py-2 border-bottom">
-                  <span>Jugadores activos</span>
-                  <strong id="kpiJugadores">0</strong>
-                </div>
-                <div class="d-flex justify-content-between pt-2">
-                  <span>Videojuegos disponibles</span>
-                  <strong id="kpiJuegos">0</strong>
-                </div>
+
+            <div class="col-lg-4 d-none d-lg-flex justify-content-end">
+              <div class="art-ring">
+                <i class="bi bi-trophy-fill"></i>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Resumen de KPIs en 4 bloques -->
+        <div class="row g-3">
+          <div class="col-6 col-lg-3">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <span class="d-block text-gc-muted small mb-1">Torneos totales</span>
+              <strong id="kpiTorneos" class="fs-2 text-white">0</strong>
+            </div>
+          </div>
+
+          <div class="col-6 col-lg-3">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <span class="d-block text-gc-muted small mb-1">Torneos abiertos</span>
+              <strong id="kpiAbiertos" class="fs-2 text-lime">0</strong>
+            </div>
+          </div>
+
+          <div class="col-6 col-lg-3">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <span class="d-block text-gc-muted small mb-1">Jugadores activos</span>
+              <strong id="kpiJugadores" class="fs-2 text-white">0</strong>
+            </div>
+          </div>
+
+          <div class="col-6 col-lg-3">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <span class="d-block text-gc-muted small mb-1">Videojuegos</span>
+              <strong id="kpiJuegos" class="fs-2 text-white">0</strong>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- =========================================================
-           2. PANTALLA DE TORNEOS Y PARTICIPACIONES
+           2. PANTALLA DE TORNEOS
            ========================================================= -->
       <div class="tab-pane fade" id="panel-torneos" role="tabpanel">
         
-        <div class="card p-3 p-md-4 mb-4">
-          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div class="gc-panel p-3 p-md-4 mb-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-3 border-bottom border-gc">
             <div>
-              <h5 class="m-0">Listado de Torneos</h5>
-              <small class="text-muted">Filtra por estado o videojuego, cambia estados al vuelo o consulta sus participantes</small>
+              <h2 class="h4 fw-bold text-white m-0">Listado de Torneos</h2>
+              <small class="text-gc-muted">Filtra, cambia estados o consulta inscritos</small>
             </div>
-            <button type="button" id="btnResetFiltros" class="btn btn-sm btn-outline-secondary">Ver todos</button>
+            <button type="button" id="btnResetFiltros" class="btn btn-sm btn-gc-glass px-3">Ver todos</button>
           </div>
 
-          <!-- BLOQUES SEPARADOS POR PROXIMIDAD (FILTROS VS BÚSQUEDA DIRECTA) -->
+          <!-- Filtros y búsqueda directa -->
           <div class="row g-3 mb-4">
-            <!-- Grupo A: Filtros combinados -->
             <div class="col-lg-8">
-              <div class="filter-box p-3 rounded border bg-light h-100">
-                <span class="d-block small fw-bold text-uppercase text-muted mb-2">Filtrar competiciones</span>
+              <div class="gc-subpanel p-3 h-100">
+                <span class="d-block small fw-bold text-lime mb-2">Filtrar competiciones</span>
                 <div class="row g-2 align-items-end">
-                  <div class="col-sm-4">
-                    <label for="filtroEstado" class="form-label small mb-1">Estado</label>
-                    <select id="filtroEstado" class="form-select">
+                  <div class="col-12 col-sm-4">
+                    <label for="filtroEstado" class="form-label small text-gc-muted mb-1">Estado</label>
+                    <select id="filtroEstado" class="form-select gc-input">
                       <option value="">Todos los estados</option>
                       <option value="ABIERTO">ABIERTO</option>
                       <option value="EN_CURSO">EN_CURSO</option>
                       <option value="FINALIZADO">FINALIZADO</option>
                     </select>
                   </div>
-                  <div class="col-sm-5">
-                    <label for="filtroJuego" class="form-label small mb-1">Videojuego</label>
-                    <select id="filtroJuego" class="form-select">
+                  <div class="col-12 col-sm-5">
+                    <label for="filtroJuego" class="form-label small text-gc-muted mb-1">Videojuego</label>
+                    <select id="filtroJuego" class="form-select gc-input">
                       <option value="">Todos los videojuegos</option>
                     </select>
                   </div>
-                  <div class="col-sm-3">
-                    <button type="button" id="btnFiltrarTorneos" class="btn btn-primary w-100">Filtrar</button>
+                  <div class="col-12 col-sm-3">
+                    <button type="button" id="btnFiltrarTorneos" class="btn btn-lime w-100">Filtrar</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Grupo B: Consulta directa por ID -->
             <div class="col-lg-4">
-              <div class="filter-box p-3 rounded border bg-light h-100">
-                <span class="d-block small fw-bold text-uppercase text-muted mb-2">Consulta directa por ID</span>
+              <div class="gc-subpanel p-3 h-100">
+                <span class="d-block small fw-bold text-info mb-2">Buscar por ID</span>
                 <div class="row g-2 align-items-end">
                   <div class="col-7">
-                    <label for="buscarTorneoId" class="form-label small mb-1">ID Torneo</label>
-                    <input type="number" id="buscarTorneoId" class="form-control" placeholder="Ej. 1" min="1">
+                    <label for="buscarTorneoId" class="form-label small text-gc-muted mb-1">ID Torneo</label>
+                    <input type="number" id="buscarTorneoId" class="form-control gc-input" placeholder="Ej. 1" min="1">
                   </div>
                   <div class="col-5">
-                    <button type="button" id="btnBuscarTorneo" class="btn btn-secondary w-100">Buscar</button>
+                    <button type="button" id="btnBuscarTorneo" class="btn btn-gc-glass w-100">Buscar</button>
                   </div>
                 </div>
               </div>
@@ -157,10 +197,10 @@
 
           <div id="resTorneo" class="mb-3"></div>
 
-          <!-- TABLA RESPONSIVE DE TORNEOS -->
+          <!-- Tabla de Torneos -->
           <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead class="table-dark">
+            <table class="table table-hover gc-table align-middle text-nowrap">
+              <thead>
                 <tr>
                   <th>ID</th>
                   <th>Torneo</th>
@@ -176,63 +216,63 @@
           </div>
         </div>
 
-        <!-- FILA INFERIOR: CREAR TORNEO / INSCRIBIR Y DETALLE DE PARTICIPANTES -->
+        <!-- Formularios y Detalle -->
         <div class="row g-4">
-          <div class="col-md-6">
-            <div class="card p-3 p-md-4 h-100">
-              <h5 class="mb-3">Crear Nuevo Torneo</h5>
+          <div class="col-md-6 col-lg-4">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <h5 class="text-white fw-bold mb-3 pb-2 border-bottom border-gc">Crear Torneo</h5>
               <form id="formTorneo">
                 <div class="mb-3">
-                  <label for="tNombre" class="form-label">Nombre del torneo</label>
-                  <input type="text" id="tNombre" class="form-control" placeholder="Ej. Copa Primavera Valorant" required>
+                  <label for="tNombre" class="form-label small text-gc-muted">Nombre del torneo</label>
+                  <input type="text" id="tNombre" class="form-control gc-input" placeholder="Ej. Copa Primavera Valorant" required>
                 </div>
                 <div class="mb-3">
-                  <label for="tEstado" class="form-label">Estado inicial</label>
-                  <select id="tEstado" class="form-select">
+                  <label for="tEstado" class="form-label small text-gc-muted">Estado inicial</label>
+                  <select id="tEstado" class="form-select gc-input">
                     <option value="ABIERTO">ABIERTO</option>
                     <option value="EN_CURSO">EN_CURSO</option>
                     <option value="FINALIZADO">FINALIZADO</option>
                   </select>
                 </div>
                 <div class="mb-4">
-                  <label for="tVideojuego" class="form-label">Videojuego asociado</label>
-                  <select id="tVideojuego" class="form-select" required>
+                  <label for="tVideojuego" class="form-label small text-gc-muted">Videojuego asociado</label>
+                  <select id="tVideojuego" class="form-select gc-input" required>
                     <option value="">Selecciona un videojuego...</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-success w-100">Crear Torneo</button>
+                <button type="submit" class="btn btn-lime w-100 py-2">Crear Torneo</button>
               </form>
             </div>
           </div>
 
-          <div class="col-md-6">
-            <!-- Formulario de inscripción -->
-            <div class="card p-3 p-md-4 mb-4">
-              <h5 class="mb-3">Inscribir Jugador en Torneo</h5>
+          <div class="col-md-6 col-lg-4">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <h5 class="text-white fw-bold mb-3 pb-2 border-bottom border-gc">Inscribir Jugador</h5>
               <form id="formInscripcion">
                 <div class="mb-3">
-                  <label for="insJugador" class="form-label">Jugador</label>
-                  <select id="insJugador" class="form-select" required>
+                  <label for="insJugador" class="form-label small text-gc-muted">Jugador</label>
+                  <select id="insJugador" class="form-select gc-input" required>
                     <option value="">Selecciona un jugador...</option>
                   </select>
                 </div>
                 <div class="mb-4">
-                  <label for="insTorneo" class="form-label">Torneo disponible</label>
-                  <select id="insTorneo" class="form-select" required>
+                  <label for="insTorneo" class="form-label small text-gc-muted">Torneo disponible</label>
+                  <select id="insTorneo" class="form-select gc-input" required>
                     <option value="">Selecciona un torneo...</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Confirmar Inscripción</button>
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Confirmar Inscripción</button>
               </form>
             </div>
+          </div>
 
-            <!-- Ficha de detalle de participantes de un torneo -->
-            <div id="panelParticipantesTorneo" class="card p-3 p-md-4" hidden>
+          <div class="col-12 col-lg-4">
+            <div id="panelParticipantesTorneo" class="gc-panel gc-detail p-3 p-md-4 h-100" hidden>
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 id="tituloParticipantesTorneo" class="m-0">Detalle del Torneo</h5>
-                <button type="button" class="btn-close" aria-label="Cerrar" onclick="document.getElementById('panelParticipantesTorneo').setAttribute('hidden', true)"></button>
+                <h5 id="tituloParticipantesTorneo" class="text-white fw-bold m-0">Detalle del Torneo</h5>
+                <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" onclick="document.getElementById('panelParticipantesTorneo').setAttribute('hidden', true)"></button>
               </div>
-              <p id="subtituloParticipantesTorneo" class="text-muted small mb-3"></p>
+              <p id="subtituloParticipantesTorneo" class="text-gc-muted small mb-3"></p>
               <div id="listaParticipantesTorneo"></div>
             </div>
           </div>
@@ -243,76 +283,73 @@
            3. PANTALLA DE JUGADORES
            ========================================================= -->
       <div class="tab-pane fade" id="panel-jugadores" role="tabpanel">
-        
-        <div class="card p-3 p-md-4 mb-4">
-          <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
-            <div>
-              <h5 class="m-0">Directorio de Jugadores</h5>
-              <small class="text-muted">Consulta fichas, edita perfiles o revisa las competiciones de cada jugador</small>
-            </div>
-            <div class="d-flex gap-2 align-items-end">
-              <div>
-                <label for="buscarJugadorId" class="form-label small mb-1">Buscar por ID</label>
-                <input type="number" id="buscarJugadorId" class="form-control" style="width: 130px;" placeholder="ID" min="1">
-              </div>
-              <button type="button" id="btnBuscarJugador" class="btn btn-primary">Buscar</button>
-            </div>
-          </div>
-
-          <div id="resJugador" class="mb-3"></div>
-
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead class="table-dark">
-                <tr>
-                  <th>ID</th>
-                  <th>Nick</th>
-                  <th>Email</th>
-                  <th>Nivel</th>
-                  <th class="text-end">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="cuerpoJugadores"></tbody>
-            </table>
-          </div>
-        </div>
-
         <div class="row g-4">
-          <!-- Formulario Alta / Edición de Jugador -->
-          <div class="col-md-6">
-            <div class="card p-3 p-md-4">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 id="tituloFormJugador" class="m-0">Alta de Jugador</h5>
-                <button type="button" id="btnCancelarEdicionJugador" class="btn btn-sm btn-outline-secondary" hidden>Cancelar edición</button>
+          <div class="col-xl-8">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4 pb-3 border-bottom border-gc">
+                <div>
+                  <h2 class="h4 fw-bold text-white m-0">Directorio de Jugadores</h2>
+                  <small class="text-gc-muted">Consulta fichas, edita perfiles o revisa sus torneos</small>
+                </div>
+                <div class="d-flex gap-2 align-items-end w-100 w-sm-auto">
+                  <div class="flex-grow-1">
+                    <label for="buscarJugadorId" class="form-label small text-gc-muted mb-1">Buscar por ID</label>
+                    <input type="number" id="buscarJugadorId" class="form-control gc-input" placeholder="ID" min="1">
+                  </div>
+                  <button type="button" id="btnBuscarJugador" class="btn btn-lime">Buscar</button>
+                </div>
+              </div>
+
+              <div id="resJugador" class="mb-3"></div>
+
+              <div class="table-responsive">
+                <table class="table table-hover gc-table align-middle text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nick</th>
+                      <th>Email</th>
+                      <th>Nivel</th>
+                      <th class="text-end">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpoJugadores"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4">
+            <div class="gc-panel p-3 p-md-4 mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-gc">
+                <h5 id="tituloFormJugador" class="text-white fw-bold m-0">Alta de Jugador</h5>
+                <button type="button" id="btnCancelarEdicionJugador" class="btn btn-sm btn-gc-glass" hidden>Cancelar</button>
               </div>
               <form id="formJugador">
                 <input type="hidden" id="jIdEdit">
                 <div class="mb-3">
-                  <label for="jNick" class="form-label">Nick competitivo</label>
-                  <input type="text" id="jNick" class="form-control" placeholder="Ej. ShadowStriker" required>
+                  <label for="jNick" class="form-label small text-gc-muted">Nick competitivo</label>
+                  <input type="text" id="jNick" class="form-control gc-input" placeholder="Ej. ShadowStriker" required>
                 </div>
                 <div class="mb-3">
-                  <label for="jEmail" class="form-label">Correo electrónico</label>
-                  <input type="email" id="jEmail" class="form-control" placeholder="jugador@gamearena.es" required>
+                  <label for="jEmail" class="form-label small text-gc-muted">Correo electrónico</label>
+                  <input type="email" id="jEmail" class="form-control gc-input" placeholder="jugador@gamearena.es" required>
                 </div>
                 <div class="mb-4">
-                  <label for="jNivel" class="form-label">Nivel competitivo</label>
-                  <input type="number" id="jNivel" class="form-control" placeholder="Ej. 25" min="1" required>
+                  <label for="jNivel" class="form-label small text-gc-muted">Nivel competitivo</label>
+                  <input type="number" id="jNivel" class="form-control gc-input" placeholder="Ej. 25" min="1" required>
                 </div>
-                <button type="submit" id="btnJugador" class="btn btn-success w-100">Guardar Jugador</button>
+                <button type="submit" id="btnJugador" class="btn btn-lime w-100 py-2">Guardar Jugador</button>
               </form>
             </div>
-          </div>
 
-          <!-- Ficha del jugador y sus torneos -->
-          <div class="col-md-6">
-            <div id="panelTorneosJugador" class="card p-3 p-md-4" hidden>
+            <div id="panelTorneosJugador" class="gc-panel gc-detail p-3 p-md-4" hidden>
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 id="tituloTorneosJugador" class="m-0">Ficha del Jugador</h5>
-                <button type="button" class="btn-close" aria-label="Cerrar" onclick="document.getElementById('panelTorneosJugador').setAttribute('hidden', true)"></button>
+                <h5 id="tituloTorneosJugador" class="text-white fw-bold m-0">Ficha del Jugador</h5>
+                <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" onclick="document.getElementById('panelTorneosJugador').setAttribute('hidden', true)"></button>
               </div>
               <div id="infoFichaJugador" class="mb-3"></div>
-              <h6 class="small text-uppercase text-muted fw-bold mb-2">Participaciones en torneos</h6>
+              <h6 class="small text-uppercase text-lime fw-bold mb-2">Participaciones en torneos</h6>
               <div id="listaTorneosJugador"></div>
             </div>
           </div>
@@ -323,63 +360,61 @@
            4. PANTALLA DE VIDEOJUEGOS
            ========================================================= -->
       <div class="tab-pane fade" id="panel-videojuegos" role="tabpanel">
-        
-        <div class="card p-3 p-md-4 mb-4">
-          <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
-            <div>
-              <h5 class="m-0">Catálogo de Videojuegos</h5>
-              <small class="text-muted">Consulta la ficha de cada título o filtra directamente sus torneos</small>
-            </div>
-            <div class="d-flex gap-2 align-items-end">
-              <div>
-                <label for="buscarJuegoId" class="form-label small mb-1">Buscar por ID</label>
-                <input type="number" id="buscarJuegoId" class="form-control" style="width: 130px;" placeholder="ID" min="1">
-              </div>
-              <button type="button" id="btnBuscarJuego" class="btn btn-primary">Buscar</button>
-            </div>
-          </div>
-
-          <div id="resJuego" class="mb-3"></div>
-
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead class="table-dark">
-                <tr>
-                  <th>ID</th>
-                  <th>Título</th>
-                  <th>Género</th>
-                  <th class="text-end">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="cuerpoJuegos"></tbody>
-            </table>
-          </div>
-        </div>
-
         <div class="row g-4">
-          <div class="col-12 col-md-6">
-            <div class="card p-3 p-md-4">
-              <h5 class="mb-3">Registrar Nuevo Videojuego</h5>
+          <div class="col-xl-8">
+            <div class="gc-panel p-3 p-md-4 h-100">
+              <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4 pb-3 border-bottom border-gc">
+                <div>
+                  <h2 class="h4 fw-bold text-white m-0">Catálogo de Videojuegos</h2>
+                  <small class="text-gc-muted">Consulta la ficha de cada título o filtra sus torneos</small>
+                </div>
+                <div class="d-flex gap-2 align-items-end w-100 w-sm-auto">
+                  <div class="flex-grow-1">
+                    <label for="buscarJuegoId" class="form-label small text-gc-muted mb-1">Buscar por ID</label>
+                    <input type="number" id="buscarJuegoId" class="form-control gc-input" placeholder="ID" min="1">
+                  </div>
+                  <button type="button" id="btnBuscarJuego" class="btn btn-lime">Buscar</button>
+                </div>
+              </div>
+
+              <div id="resJuego" class="mb-3"></div>
+
+              <div class="table-responsive">
+                <table class="table table-hover gc-table align-middle text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Título</th>
+                      <th>Género</th>
+                      <th class="text-end">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpoJuegos"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4">
+            <div class="gc-panel p-3 p-md-4 mb-4">
+              <h5 class="text-white fw-bold mb-3 pb-2 border-bottom border-gc">Registrar Videojuego</h5>
               <form id="formJuego">
                 <div class="mb-3">
-                  <label for="juegoTitulo" class="form-label">Título del videojuego</label>
-                  <input type="text" id="juegoTitulo" class="form-control" placeholder="Ej. Valorant" required>
+                  <label for="juegoTitulo" class="form-label small text-gc-muted">Título del videojuego</label>
+                  <input type="text" id="juegoTitulo" class="form-control gc-input" placeholder="Ej. Valorant" required>
                 </div>
                 <div class="mb-4">
-                  <label for="juegoGenero" class="form-label">Género</label>
-                  <input type="text" id="juegoGenero" class="form-control" placeholder="Ej. Shooter Táctico" required>
+                  <label for="juegoGenero" class="form-label small text-gc-muted">Género</label>
+                  <input type="text" id="juegoGenero" class="form-control gc-input" placeholder="Ej. Shooter Táctico" required>
                 </div>
-                <button type="submit" class="btn btn-success w-100">Guardar Videojuego</button>
+                <button type="submit" class="btn btn-lime w-100 py-2">Guardar Videojuego</button>
               </form>
             </div>
-          </div>
 
-          <!-- Ficha del videojuego -->
-          <div class="col-12 col-md-6">
-            <div id="panelFichaJuego" class="card p-3 p-md-4" hidden>
+            <div id="panelFichaJuego" class="gc-panel gc-detail p-3 p-md-4" hidden>
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 id="tituloFichaJuego" class="m-0">Ficha de Videojuego</h5>
-                <button type="button" class="btn-close" aria-label="Cerrar" onclick="document.getElementById('panelFichaJuego').setAttribute('hidden', true)"></button>
+                <h5 id="tituloFichaJuego" class="text-white fw-bold m-0">Ficha de Videojuego</h5>
+                <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" onclick="document.getElementById('panelFichaJuego').setAttribute('hidden', true)"></button>
               </div>
               <div id="contenidoFichaJuego"></div>
             </div>
@@ -388,7 +423,7 @@
       </div>
 
     </div>
-  </div>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
